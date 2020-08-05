@@ -24,7 +24,7 @@
      install from [[https://github.com/ibus/ibus][IBus]] and [[https://github.com/davatorium/rofi][Rofi]]'s source.
 
 ** Usage
-   First, *you need to make sure that =ibus-daemon= is running.* You can
+   First, you need to make sure that =ibus-daemon= is running. You can
    use =pgrep -x ibus-daemon= to check.
    Move =scripts/= to =$XDG_CONFIG_HOME/polybar/= if you don't
    have this directory; otherwise, move all the scripts to the already
