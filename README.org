@@ -28,8 +28,8 @@
    use =pgrep -x ibus-daemon= to check.
    Move =scripts/= to =$XDG_CONFIG_HOME/polybar/= if you don't
    have this directory; otherwise, move all the scripts to the already
-   existed =scripts/= directory. *Keep in mind that the scripts need to
-   be under =scripts/= to work.*
+   existed =scripts/= directory. Keep in mind that the scripts need to
+   be under =scripts/= to work.
    #+begin_src shell
    # assume that the directory doesn't exist and $XDG_CONFIG_HOME is $HOME/.config
    $ mv scripts/ ~/.config/polybar
