@@ -38,7 +38,7 @@
    Copy the content below to your polybar configuration
    file(=config/config.ini=...).
    #+begin_src ini
-   [module/ibus]
+[module/ibus]
 type = custom/script
 
 exec = ~/.config/polybar/scripts/ibus-engine.sh &
@@ -119,7 +119,7 @@ That's it! Then you can:
     [[./screenshots/xkb-us-dvorak-eng.png]]
     [[./screenshots/rime-with-caps-lock.png]]
 
-** TODO [0/3]
+** TODO TODO [0/3]
   - [-] implement shortcuts for ibus-emoji.
   - [-] make the scripts faster and more efficient.
   - [-] provide a more human-readable menu for engine selection
