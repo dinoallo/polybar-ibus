@@ -1,0 +1,2 @@
+#!/bin/sh
+ibus-setup &
