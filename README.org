@@ -1,0 +1,125 @@
+* Polybar-IBus
+  A simple [[https://github.com/polybar/polybar/][polybar]] module for [[https://github.com/ibus/ibus/wiki/ReadMe][Input Bus]] users.
+
+** Features
+   - A more precise and suitable status for IBus
+   - [[https://github.com/ibus/ibus-m17n][m17n]] or other input engines support
+   - Capslock and Numlock support
+   - Shortcuts for quickly switching engines and opening IBus setting panel
+     with mouse left click and right click
+   - No systray needed
+   - More to come
+
+   Currently, this module don't work very smoothly like [[https://github.com/polybar/polybar/wiki/Module:-xkeyboard][xkeyboard]] in
+   the official polybar modules. It takes time to communicate with
+   =ibus-daemon=. Therefore, there are a 3~5 seconds delay to toggle the
+   status change :/ If you only use xkeyboard(xkb), I strongly suggest
+   you use the official module without IBus.
+
+** Requirement(s)
+   - ibus(ibus-daemon/ibus-setup)
+   - rofi
+     There is a great chance that they are already in your distro's
+     official/community/user repositories. If not, download, build and
+     install from [[https://github.com/ibus/ibus][IBus]] and [[https://github.com/davatorium/rofi][Rofi]]'s source.
+
+** Usage
+   First, *you need to make sure that =ibus-daemon= is running.* You can
+   use =pgrep -x ibus-daemon= to check.
+   Move =scripts/= to =$XDG_CONFIG_HOME/polybar/= if you don't
+   have this directory; otherwise, move all the scripts to the already
+   existed =scripts/= directory. *Keep in mind that the scripts need to
+   be under =scripts/= to work.*
+   #+begin_src shell
+   # assume that the directory doesn't exist and $XDG_CONFIG_HOME is $HOME/.config
+   $ mv scripts/ ~/.config/polybar
+   #+end_src
+
+   Copy the content below to your polybar configuration
+   file(=config/config.ini=...).
+   #+begin_src ini
+   [module/ibus]
+type = custom/script
+
+exec = ~/.config/polybar/scripts/ibus-engine.sh &
+; you need to run ibus-daemon first for the script to work
+exec-if = pgrep -x ibus-daemon
+
+tail = true
+
+format-background = ${color.mb}
+
+format-padding = ${layout.module-padding}
+
+click-left = ~/.config/polybar/scripts/ibus-switch.sh &
+click-right = ~/.config/polybar/scripts/ibus-setting.sh &
+   #+end_src ini
+Change =scripts/ibus-engine.sh= to use your favorite icons/glyphs. Optionally,
+you can take a look at and load the font I use(in =fonts/=) into your
+system(Don't forget to modify your font configuration in =config=).
+
+That's it! Then you can:
+    - change the engine using keyboard shortcuts defined in IBus
+      setting to see the status in polybar.
+    - Left-click to get an available engines menu with rofi(You need to
+      set them in Ibus setting first)
+    - Right-click to open IBus setting.
+
+** Description
+   The module is able to show up to 3 fields on the polybar when the
+   user toggles an IBus engine. They are engine type, keyboard layout
+   ,as well as its variant(if any) and language.
+
+   Let's take American dvorak keyboard(in IBus, xkb:us:dvorak:eng) for example:
+   - engine type: xkb(X keyboard)
+   - keyboard layout: us; variant: dvorak
+   - language: eng(English)
+   So your polybar will show:
+#+begin_src
+   [icon] xkb [icon] us - dvorak [icon] eng
+#+end_src
+   Engine type always exists, while the other three don't. So you may
+   see some engines show only one or two fields(i.e. rime):
+#+begin_src
+   [icon] rime [icon] sys
+#+end_src
+   It's worth knowing that Ibus might remap keyboard and shadow
+   settings from =setxkbmap= to some extent. If you don't want to use
+   IBus's keyboard layout, you can set up IBus to use system's
+   layout(=ibus-setup= or right click the module on polybar). This way,
+   polybar will show sys as keyboard layout.
+
+*** Format used when switching engines
+    If you left click on the module, you will be given a rofi menu
+    asking you what engine you would like to use. However, the format
+    of each engine name is a bit strange. In fact, the format is
+    IBus's engine name, and the four fields separated by colons
+    matches the three fields mentioned above, with the first field being the
+    engine type, the second and third being the layout, and the last
+    field being the language.
+    For example:
+#+begin_src
+    xkb:ru::rus
+    xkb:ru:phonetic:rus
+    m17n:ru:phonetic
+#+end_src
+    They are, respectively:
+    - Russian Keyboard(Xkeyboard)
+    - Russian Phonetic Keyboard(Xkeyboard)
+    - Russian Phonetic Keyboard(m17n)
+
+    Intended to keep the scripts simple and short, I decided this is
+    currently the best way to list engines in a menu(if you know a
+    better way, welcome to leave a PR!), since if you can read the
+    status displayed by polybar, you should be able to understand
+    these entries.
+
+** Screenshot(s)
+    [[./screenshots/xkb-us-eng.png]]
+    [[./screenshots/xkb-us-dvorak-eng.png]]
+    [[./screenshots/rime-with-caps-lock.png]]
+
+** TODO [0/3]
+  - [-] implement shortcuts for ibus-emoji.
+  - [-] make the scripts faster and more efficient.
+  - [-] provide a more human-readable menu for engine selection
